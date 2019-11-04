@@ -1,68 +1,243 @@
-<!doctype html>
-<html>
-  <head>
-    <!-- *Recommended WebRTC Shim -->
-    <script src="https://webrtchacks.github.io/adapter/adapter-latest.js"></script>
-  </head>
-  <body>
-    <!-- video containers -->
-    <!-- publisher -->
-    <div>
-      <video id="red5pro-publisher" width="640" height="480" muted autoplay></video>
-    </div>
-    <!-- subscriber -->
-    <div>
-      <video id="red5pro-subscriber" width="640" height="480" controls autoplay></video>
-    </div>
-    <!-- Red5 Pro SDK -->
-    <script src="lib/red5pro/red5pro-sdk.min.js"></script>
-    <!-- Create Pub/Sub -->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+    <title>sport7boom.com</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="https://static.sport7.biz/jquery.min.js"></script>
+    <script src="https://static.sport7.biz/jquery.countdown.min.js"></script>
+    <script src="https://static.sport7.biz/moment.min.js"></script>
+    <script src="https://static.sport7.biz/moment.timezone.min.js"></script>
+
+    <script src="https://static.sport7.biz/video.min.js"></script>
+    <script src="https://static.sport7.biz/videojs-contrib-hls.min.js"></script>
+    <script src="https://static.sport7.biz/videojs-contrib-media-sources.min.js"></script>
+
+    <link href="https://static.sport7.biz/font.css" rel="stylesheet" type="text/css">
+    <link href="https://static.sport7.biz/video-js.css" rel="stylesheet" type="text/css">
+
+    <style media="screen">
+    body {
+        background-color: #393939;
+        margin: 0;
+        padding: 0;
+    }
+    .video-js .vjs-big-play-button {
+        position: absolute;
+
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    button{
+        align-items: center;
+
+    }
+    #videoplayerdiv {
+        z-index: 1;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+    }
+    #videoplayer {
+        width: 100%;
+        height: 100%;
+    }
+    #myDiv {
+        z-index: 999;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0.5;
+    }
+    #timer{
+        opacity: 0.9;
+        background: #272727;
+        height: 100px;
+        width: 300px;
+        padding-top: 20px;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -30%);
+        top: -350px;
+        z-index: 100;
+    }
+    #getting-started {
+        position: inherit;
+        height: 50px;
+        color: #D63F21;
+        text-align: center;
+        font-size: 40px;
+        margin-top: 5%;
+        z-index: 10;
+        width: 100%;
+        font-family: 'Open Sans', sans-serif;
+    }
+    #timer-text {
+        position: inherit;
+        color: #fff;
+        top: 1px;
+        text-align: center;
+        width: 100%;
+        margin-top: 2%;
+        font-size: 25px;
+        font-family: 'Open Sans', sans-serif;
+    }
+    #timer-close {
+        color: grey;
+        position: inherit;
+        text-align: center;
+        width: 10%;
+        bottom: 1px;
+        margin-bottom: 2.5%;
+        cursor: pointer;
+        margin-left: 40%;
+        font-size: 18px;
+        z-index: 999;
+        font-family: 'Open Sans', sans-seri;
+    }
+    .block-alert {
+        display: none;
+        color: #fff;
+        text-align: center;
+        width: 100%;
+        position: absolute;
+        top: calc(50% - 8px);
+        font-size: 16px;
+        font-family: 'Open Sans', sans-serif;
+    }
+    .tg-button {
+        position: absolute;
+        display: block;
+        top: 10px;
+        left: 10px;
+        z-index: 10000;
+    }
+    .tg-button img {
+        width: 50px;
+        height: 50px;
+    }
+    .vjs-paused .vjs-big-play-button,
+    .vjs-paused.vjs-has-started .vjs-big-play-button {
+        display: block;
+    }
+    iframe.vjs-resize-manager {
+        display: none;
+    }
+    .vjs-control-bar {
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    </style>
     <script>
-      (function(red5prosdk) {
-        'use strict';
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-        var rtcPublisher = new red5prosdk.RTCPublisher();
-        var rtcSubscriber = new red5prosdk.RTCSubscriber();
-        var config = {
-          protocol: 'ws',
-          host: 'localhost',
-          port: 5080,
-          app: 'live',
-          streamName: 'mystream',
-          rtcConfiguration: {
-            iceServers: [{urls: 'stun:stun2.l.google.com:19302'}],
-            iceCandidatePoolSize: 2,
-            bundlePolicy: 'max-bundle'
-          } // See https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/RTCPeerConnection#RTCConfiguration_dictionary
-        };
-
-        function subscribe () {
-          rtcSubscriber.init(config)
-            .then(function () {
-              return rtcSubscriber.subscribe();
-            })
-            .then(function () {
-              console.log('Playing!');
-            })
-            .catch(function (err) {
-              console.log('Could not play: ' + err);
-            });
-        }
-
-        rtcPublisher.init(config)
-          .then(function () {
-            // On broadcast started, subscribe.
-            rtcPublisher.on(red5prosdk.PublisherEventTypes.PUBLISH_START, subscribe);
-            return rtcPublisher.publish();
-          })
-          .then(function () {
-            console.log('Publishing!');
-          })
-          .catch(function (err) {
-            console.error('Could not publish: ' + err);
-          });
-
-      }(window.red5prosdk));
+      ga('create', 'UA-89841543-1', 'auto');
+      ga('send', 'pageview');
     </script>
-  </body>
+</head>
+<body id="cl_target">
+    <div id="timer">
+        <span id="timer-text">The match will begin in:</span>
+        <div id="getting-started" data-date="1000"></div>
+        <span id="timer-close">Hide</span>
+    </div>
+    <div class="wrapper">
+        <div class="adBanner">&nbsp;</div>
+    </div>
+    <div id="player-container">
+        <div id="videoplayerdiv">
+            <video id="videoplayer" class="video-js" controls="true" preload="auto" data-setup="{}" poster="https://mmm.sport7.biz/lba/MWQxMmRkMjI2NGM3OGNhNTMxZTNjOTU0NDNjNzdhNWM=/g12/rusmatchtv.jpg"></video>
+        </div>
+    </div>
+    <a class="tg-button" href="https://t.me/joinchat/AAAAAFPckRTX27z_2KkWPQ" target="_blank">
+        <img src="https://static.sportboom.pro/telegram.png" alt="telegram" />
+    </a>
+    <script src="https://static.sport7.biz/j-2db44712.js"></script>
+    <script>
+        var player;
+        var videoLink = 'https://mmm.sport7.biz/lba/MWQxMmRkMjI2NGM3OGNhNTMxZTNjOTU0NDNjNzdhNWM=/g12/rusmatchtv.m3u8?token=MWQxMmRkMjI2NGM3OGNhNTMxZTNjOTU0NDNjNzdhNWM=&id=ZDcwOWE1N2I0ODMxYzg4YjI0OTU4MTM4ODVjOThiMTg=&vip=1572846664&dip=ZWMxMWQ2YWQ4OTgyYzZhODExZjNmYTNmNTNkODUyODU=&pip=37.17.66.66&hip=NjNiNTk5MjBhZTNmNzYzMWI4MzhkNjQyODA5OWU2MTQ=';
+        var show_timer = true;
+        function startPlayer() {
+            var init = false;
+            $("#getting-started").countdown(moment.unix($("#getting-started").data('date')).format("YYYY/MM/DD H:mm"), function(event) {
+                $(this).text(event.strftime('%H:%M:%S'));
+                if(event.strftime('%H') == '00' && event.strftime('%M') < 15) {
+                    $("#timer-text").hide();
+                    $("#timer-close").hide();
+                    $("#getting-started").hide();
+                    $("#timer").hide();
+                    show_timer = false;
+                }
+                if (init == false) {
+                    var player = window.player = videojs('videoplayer');
+                    player.src({
+                        src: videoLink,
+                        type: 'application/x-mpegURL',
+                        withCredentials: true
+                    });
+                    var pvjs_tr = -1;
+                    player.on('play', function(){
+                        if(0 == pvjs_tr) {
+                            $.get('https://stat.livesportbar.net/?sp');
+                        }
+                        pvjs_tr++;
+                        state = "play";
+                    });
+                    player.on('playing', function() {
+                        state = "playing";
+                    });
+                    player.on('pause', function() {
+                        state = "pause";
+                    });
+                    player.on('error', function() {
+                        state = "error";
+                    });
+                    if(window.vast) {
+                        window.player.on('loadeddata', addVideo);
+                    }
+                    init = true;
+                }
+            });
+            var state = "open";
+            if(watchInterval) {
+                clearInterval(watchInterval);
+            }
+            var watchInterval = setInterval(function() {
+                $.get("https://stats.hd24.watch/watch?state=" + state, function (reply) {});
+            }, 5000);
+        }
+        $(document).ready(function() {
+            $.ajax({
+                url: 'https://static.sport7.biz/j-2db44712',
+                success: loadJs
+            });
+            $("#cl_target").on('click tap', function() {
+                if(show_timer) {
+                    $('#timer').show();
+                    $("#timer-close").show();
+                    $("#timer-text").show();
+                    $("#getting-started").show();
+                    $('#timer').animate({top: '45%'}, 500);
+                }
+            });
+            $("#timer-close").on('click', function() {
+                $("#timer-close").hide();
+                $("#timer-text").hide();
+                $("#getting-started").hide();
+                $("#timer").hide();
+                show_timer = false;
+            });
+        });
+    </script>
+    <script src="https://static.sport7.biz/showads.js" type="text/javascript" async defer></script>
+    <script type="text/javascript">
+        if(!document.getElementById('GKgPnptLsYFx')){
+            $.get("https://stat.livesportbar.net/?dap");
+        }
+    </script>
+</body>
 </html>
