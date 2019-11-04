@@ -8,15 +8,11 @@
 <script>
 var url = 'https://mmm.sport7.biz/lba/MWQxMmRkMjI2NGM3OGNhNTMxZTNjOTU0NDNjNzdhNWM=/g12/rusmatchtv.m3u8'; // Линк нашей трансляции
 var player; // для преера
-var muteTab = 'on';//off // Отключение звука, если человек находиться на другой вкладке и не смотрит видео
     player = playerjsi('my-video', {
             controls: true, // включить кнопки на плеере
             autoplay: true, // Автозапуск
             preload: 'auto', // Загрузка видео 
-            loop: true, // Повтор видео
             sourceOrder: true,
-            customControlsOnMobile: false, // Можно использовать свой шаблон кнопок
-            nativeControlsForTouch: true, // Использовать родные мобильные кнопки
             hls: {
                 withCredentials: true 
             },
