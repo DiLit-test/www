@@ -4,36 +4,16 @@
    </head>
 <html>
 <body>
-   <div id="player"></div>
-   <script>
-   var url = 'https://mmm.sport7.biz/lba/MWQxMmRkMjI2NGM3OGNhNTMxZTNjOTU0NDNjNzdhNWM=/g12/rusmatchtv.m3u8'; // Линк нашей трансляции
-var ads = []; // Массив в который мы будем запихивать наши рекламные теги
-var player; // для преера
-var device = 'desktop';//mobile // Это важно для корректного отображения рекламы
-var startTime = 10; // Время запуска рекламы в секундах
-var intervalTime = 10; // Промежуток времени между рекламой
-var muteTab = 'on';//off // Отключение звука, если человек находиться на другой вкладке и не смотрит видео
-var companyName; // Чтобы в логах отображалась название рекламы
-      player = playerjsjs('my-video', {
-            controls: true, // включить кнопки на плеере
-            autoplay: true, // Автозапуск
-            preload: 'auto', // Загрузка видео 
-            loop: true, // Повтор видео
-            sourceOrder: true,
-            customControlsOnMobile: false, // Можно использовать свой шаблон кнопок
-            nativeControlsForTouch: true, // Использовать родные мобильные кнопки
-            hls: {
-                withCredentials: true 
-            },
-            sources: [{
-                        src: url,
-                        type: 'application/x-mpegurl' 
-                    }],
-            techOrder: ["html5"]
-          
-        });
-      </script>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+  <video id=example-video width=960 height=540 class="video-js vjs-default-skin" controls>
+  <source
+     src="https://mmm.sport7.biz/lba/MWQxMmRkMjI2NGM3OGNhNTMxZTNjOTU0NDNjNzdhNWM=/g12/rusmatchtv.m3u8"
+     type="application/x-mpegURL">
+</video>
+<script src="playerjs.js"></script>
+<script src="videojs.hls.min.js"></script>
+<script>
+var player = palyerjs('example-video');
+player.play();
+</script>
 </body>
 </html>
