@@ -6,9 +6,27 @@
 <body>
     <div id="player"></div>
 <script>
-   var player;
-   var videoLink = 'https://mmm.sport7.biz/lba/MWQxMmRkMjI2NGM3OGNhNTMxZTNjOTU0NDNjNzdhNWM=/g12/rusmatchtv.m3u8?token=MWQxMmRkMjI2NGM3OGNhNTMxZTNjOTU0NDNjNzdhNWM=&id=ZDcwOWE1N2I0ODMxYzg4YjI0OTU4MTM4ODVjOThiMTg=&vip=1572846664&dip=ZWMxMWQ2YWQ4OTgyYzZhODExZjNmYTNmNTNkODUyODU=&pip=37.17.66.66&hip=NjNiNTk5MjBhZTNmNzYzMWI4MzhkNjQyODA5OWU2MTQ=';
-    player = new Playerjs({id:"player", file:"videoLink"});
+var url = 'https://mmm.sport7.biz/lba/MWQxMmRkMjI2NGM3OGNhNTMxZTNjOTU0NDNjNzdhNWM=/g12/rusmatchtv.m3u8'; // Линк нашей трансляции
+var player; // для преера
+var muteTab = 'on';//off // Отключение звука, если человек находиться на другой вкладке и не смотрит видео
+    player = playerjs('my-video', {
+            controls: true, // включить кнопки на плеере
+            autoplay: true, // Автозапуск
+            preload: 'auto', // Загрузка видео 
+            loop: true, // Повтор видео
+            sourceOrder: true,
+            customControlsOnMobile: false, // Можно использовать свой шаблон кнопок
+            nativeControlsForTouch: true, // Использовать родные мобильные кнопки
+            hls: {
+                withCredentials: true 
+            },
+            sources: [{
+                        src: url,
+                        type: 'application/x-mpegurl' 
+                    }],
+            techOrder: ["html5"]
+          
+        });
 </script>
 <h1>Hello World</h1>
 <p>I'm hosted with GitHub Pages.</p>
