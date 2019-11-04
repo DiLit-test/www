@@ -1,87 +1,16 @@
 <!DOCTYPE html>
 <head>
-    <script src="playerjs.js" type="text/javascript"></script>
+    <script src="play.js" type="text/javascript"></script>
     </head>
 <html>
 <body>
     <div id="player"></div>
 
+<div id="player"></div>
+
 <script>
-        var player;
-        var videoLink = 'https://mmm.sport7.biz/lba/MWQxMmRkMjI2NGM3OGNhNTMxZTNjOTU0NDNjNzdhNWM=/g12/rusmatchtv.m3u8;
-        var show_timer = true;
-        function startPlayer() {
-            var init = false;
-            $("#getting-started").countdown(moment.unix($("#getting-started").data('date')).format("YYYY/MM/DD H:mm"), function(event) {
-                $(this).text(event.strftime('%H:%M:%S'));
-                if(event.strftime('%H') == '00' && event.strftime('%M') < 15) {
-                    $("#timer-text").hide();
-                    $("#timer-close").hide();
-                    $("#getting-started").hide();
-                    $("#timer").hide();
-                    show_timer = false;
-                }
-                if (init == false) {
-                    var player = window.player = playerjs('videoplayer');
-                    player.src({
-                        src: videoLink,
-                        type: 'application/x-mpegURL',
-                        withCredentials: true
-                    });
-                    var pvjs_tr = -1;
-                    player.on('play', function(){
-                        if(0 == pvjs_tr) {
-                            $.get('https://stat.livesportbar.net/?sp');
-                        }
-                        pvjs_tr++;
-                        state = "play";
-                    });
-                    player.on('playing', function() {
-                        state = "playing";
-                    });
-                    player.on('pause', function() {
-                        state = "pause";
-                    });
-                    player.on('error', function() {
-                        state = "error";
-                    });
-                    if(window.vast) {
-                        window.player.on('loadeddata', addVideo);
-                    }
-                    init = true;
-                }
-            });
-            var state = "open";
-            if(watchInterval) {
-                clearInterval(watchInterval);
-            }
-            var watchInterval = setInterval(function() {
-                $.get("https://stats.hd24.watch/watch?state=" + state, function (reply) {});
-            }, 5000);
-        }
-        $(document).ready(function() {
-            $.ajax({
-                url: 'https://static.sport7.biz/j-2db44712',
-                success: loadJs
-            });
-            $("#cl_target").on('click tap', function() {
-                if(show_timer) {
-                    $('#timer').show();
-                    $("#timer-close").show();
-                    $("#timer-text").show();
-                    $("#getting-started").show();
-                    $('#timer').animate({top: '45%'}, 500);
-                }
-            });
-            $("#timer-close").on('click', function() {
-                $("#timer-close").hide();
-                $("#timer-text").hide();
-                $("#getting-started").hide();
-                $("#timer").hide();
-                show_timer = false;
-            });
-        });
-    </script>
+   var player = new playjs({id:"player", file:"https://mmm.sport7.biz/lba/MWQxMmRkMjI2NGM3OGNhNTMxZTNjOTU0NDNjNzdhNWM=/g12/rusmatchtv.m3u8"});
+</script>
 <h1>Hello World</h1>
 <p>I'm hosted with GitHub Pages.</p>
 </body>
